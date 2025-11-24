@@ -4,6 +4,7 @@ struct AlarmEditView: View {
     @Environment(\.dismiss) var dismiss
     var alarm: Alarm?
     var onSave: (Alarm) -> Void
+    var settings: UserSettings
     
     @State private var time: Date = Date()
     @State private var label: String = "Alarm"
@@ -12,9 +13,12 @@ struct AlarmEditView: View {
     @State private var speed: Double = 1.0
     @State private var soundName: String = "default"
     @State private var repeatOnFailure: Bool = true
+    @State private var showSoundAlert = false
+    @State private var pendingAlarm: Alarm?
     
-    init(alarm: Alarm? = nil, onSave: @escaping (Alarm) -> Void) {
+    init(alarm: Alarm? = nil, settings: UserSettings, onSave: @escaping (Alarm) -> Void) {
         self.alarm = alarm
+        self.settings = settings
         self.onSave = onSave
         
         if let alarm = alarm {
@@ -77,25 +81,48 @@ struct AlarmEditView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        let settings = FlashAnzanSettings(digitCount: digitCount, numberCount: numberCount, speed: speed)
+                        let alarmSettings = FlashAnzanSettings(digitCount: digitCount, numberCount: numberCount, speed: speed)
                         let newAlarm = Alarm(
                             id: alarm?.id ?? UUID(),
                             time: time,
                             label: label,
                             isEnabled: true,
-                            flashAnzanSettings: settings,
+                            flashAnzanSettings: alarmSettings,
                             soundName: soundName,
                             repeatOnFailure: repeatOnFailure
                         )
-                        onSave(newAlarm)
+                        
+                        if settings.showNotificationSoundAlert {
+                            pendingAlarm = newAlarm
+                            showSoundAlert = true
+                        } else {
+                            onSave(newAlarm)
+                            dismiss()
+                        }
+                    }
+                }
+            }
+            .alert("通知音について", isPresented: $showSoundAlert) {
+                Button("OK", role: .cancel) {
+                    if let alarm = pendingAlarm {
+                        onSave(alarm)
                         dismiss()
                     }
                 }
+                Button("次回から表示しない") {
+                    settings.showNotificationSoundAlert = false
+                    if let alarm = pendingAlarm {
+                        onSave(alarm)
+                        dismiss()
+                    }
+                }
+            } message: {
+                Text("通知音は alarm.caf に固定されています。\nアプリ内でのアラーム音のみ選択した音が使用されます。")
             }
         }
     }
 }
 
 #Preview {
-    AlarmEditView(onSave: { _ in })
+    AlarmEditView(settings: UserSettings(), onSave: { _ in })
 }

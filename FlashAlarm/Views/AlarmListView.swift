@@ -78,12 +78,12 @@ struct AlarmListView: View {
                 }
             }
             .sheet(item: $editingAlarm) { alarm in
-                AlarmEditView(alarm: alarm) { updatedAlarm in
+                AlarmEditView(alarm: alarm, settings: settings) { updatedAlarm in
                     storage.updateAlarm(updatedAlarm)
                 }
             }
             .sheet(isPresented: $isShowingEditView) {
-                AlarmEditView(alarm: nil) { newAlarm in
+                AlarmEditView(alarm: nil, settings: settings) { newAlarm in
                     storage.addAlarm(newAlarm)
                 }
             }

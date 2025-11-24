@@ -19,19 +19,11 @@ enum AlarmSound: String, CaseIterable, Codable {
     }
     
     var notificationSound: UNNotificationSound {
-        // Map to iOS system notification sounds
-        switch self {
-        case .default: return .default
-        case .chime: return UNNotificationSound(named: UNNotificationSoundName("Chime.caf"))
-        case .bell: return UNNotificationSound(named: UNNotificationSoundName("Bell.caf"))
-        case .radar: return UNNotificationSound(named: UNNotificationSoundName("Radar.caf"))
-        case .alarm: return UNNotificationSound(named: UNNotificationSoundName("Alarm.caf"))
-        }
+        // Use alarm.caf for all notification sounds
+        return UNNotificationSound(named: UNNotificationSoundName("alarm.caf"))
     }
     
     var fileName: String? {
-        // For custom sounds, return the filename
-        // For now, we'll use system sounds
-        return nil
+        return "alarm.caf"
     }
 }
