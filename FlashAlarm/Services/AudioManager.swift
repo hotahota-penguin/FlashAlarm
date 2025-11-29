@@ -7,16 +7,30 @@ class AudioManager {
     private var isPlaying = false
     
     func playAlarmSound(_ soundName: String) {
-        // For iOS system sounds, we'll use AudioServicesPlaySystemSound
-        // This is a simple approach that works without audio files
+        // Get the sound file name from AlarmSound enum
         let sound = AlarmSound(rawValue: soundName) ?? .default
+        let fileName = sound.fileName
         
-        // Play system sound repeatedly
-        AudioServicesPlaySystemSound(sound.systemSoundID)
-        isPlaying = true
-        
-        // Schedule repeated playback
-        scheduleNextSound(sound.systemSoundID)
+        // Try to load the audio file
+        if let url = Bundle.main.url(forResource: fileName.replacingOccurrences(of: ".caf", with: ""), withExtension: "caf") {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.numberOfLoops = -1 // Loop indefinitely
+                audioPlayer?.play()
+                isPlaying = true
+            } catch {
+                print("Error playing audio file: \(error)")
+                // Fallback to system sound
+                AudioServicesPlaySystemSound(sound.systemSoundID)
+                isPlaying = true
+                scheduleNextSound(sound.systemSoundID)
+            }
+        } else {
+            // Fallback to system sound if file not found
+            AudioServicesPlaySystemSound(sound.systemSoundID)
+            isPlaying = true
+            scheduleNextSound(sound.systemSoundID)
+        }
     }
     
     private func scheduleNextSound(_ soundID: UInt32) {

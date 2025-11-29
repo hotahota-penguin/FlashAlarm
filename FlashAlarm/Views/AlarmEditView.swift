@@ -13,8 +13,6 @@ struct AlarmEditView: View {
     @State private var speed: Double = 1.0
     @State private var soundName: String = "default"
     @State private var repeatOnFailure: Bool = true
-    @State private var showSoundAlert = false
-    @State private var pendingAlarm: Alarm?
     
     init(alarm: Alarm? = nil, settings: UserSettings, onSave: @escaping (Alarm) -> Void) {
         self.alarm = alarm
@@ -43,15 +41,6 @@ struct AlarmEditView: View {
                 
                 Section(header: Text("Label")) {
                     TextField("Label", text: $label)
-                }
-                
-                Section(header: Text("Alarm Sound")) {
-                    Picker("Sound", selection: $soundName) {
-                        ForEach(AlarmSound.allCases, id: \.rawValue) { sound in
-                            Text(sound.rawValue).tag(sound.rawValue.lowercased())
-                        }
-                    }
-                    .pickerStyle(.menu)
                 }
                 
                 Section(header: Text("Flash Anzan Settings")) {
@@ -91,33 +80,10 @@ struct AlarmEditView: View {
                             soundName: soundName,
                             repeatOnFailure: repeatOnFailure
                         )
-                        
-                        if settings.showNotificationSoundAlert {
-                            pendingAlarm = newAlarm
-                            showSoundAlert = true
-                        } else {
-                            onSave(newAlarm)
-                            dismiss()
-                        }
-                    }
-                }
-            }
-            .alert("通知音について", isPresented: $showSoundAlert) {
-                Button("OK", role: .cancel) {
-                    if let alarm = pendingAlarm {
-                        onSave(alarm)
+                        onSave(newAlarm)
                         dismiss()
                     }
                 }
-                Button("次回から表示しない") {
-                    settings.showNotificationSoundAlert = false
-                    if let alarm = pendingAlarm {
-                        onSave(alarm)
-                        dismiss()
-                    }
-                }
-            } message: {
-                Text("通知音は alarm.caf に固定されています。\nアプリ内でのアラーム音のみ選択した音が使用されます。")
             }
         }
     }

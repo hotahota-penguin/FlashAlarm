@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9BC6FE552ED4794F00DA448E /* alarm.caf in Resources */ = {isa = PBXBuildFile; fileRef = 9BC6FE542ED4794F00DA448E /* alarm.caf */; };
 		9BC6FE942ED5EC1100DA448E /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9BC6FE932ED5EC1100DA448E /* InfoPlist.xcstrings */; };
+		9BC6FED02EDA7C8B00DA448E /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 9BC6FECF2EDA7C8B00DA448E /* GoogleMobileAds */; };
+		9BC6FF072EDB165000DA448E /* mixkit-spaceship-alarm-998.caf in Resources */ = {isa = PBXBuildFile; fileRef = 9BC6FF062EDB165000DA448E /* mixkit-spaceship-alarm-998.caf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,11 +36,25 @@
 		9BC6FE0D2ED3DF8500DA448E /* FlashAlarmUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashAlarmUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BC6FE542ED4794F00DA448E /* alarm.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = alarm.caf; sourceTree = "<group>"; };
 		9BC6FE932ED5EC1100DA448E /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		9BC6FF062EDB165000DA448E /* mixkit-spaceship-alarm-998.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "mixkit-spaceship-alarm-998.caf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9BC6FF052EDB155C00DA448E /* Exceptions for "FlashAlarm" folder in "FlashAlarm" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9BC6FDF32ED3DF8200DA448E /* FlashAlarm */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9BC6FDF62ED3DF8200DA448E /* FlashAlarm */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9BC6FF052EDB155C00DA448E /* Exceptions for "FlashAlarm" folder in "FlashAlarm" target */,
+			);
 			path = FlashAlarm;
 			sourceTree = "<group>";
 		};
@@ -59,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BC6FED02EDA7C8B00DA448E /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +99,7 @@
 		9BC6FDEB2ED3DF8200DA448E = {
 			isa = PBXGroup;
 			children = (
+				9BC6FF062EDB165000DA448E /* mixkit-spaceship-alarm-998.caf */,
 				9BC6FE932ED5EC1100DA448E /* InfoPlist.xcstrings */,
 				9BC6FE542ED4794F00DA448E /* alarm.caf */,
 				9BC6FDF62ED3DF8200DA448E /* FlashAlarm */,
@@ -121,6 +139,7 @@
 			);
 			name = FlashAlarm;
 			packageProductDependencies = (
+				9BC6FECF2EDA7C8B00DA448E /* GoogleMobileAds */,
 			);
 			productName = FlashAlarm;
 			productReference = 9BC6FDF42ED3DF8200DA448E /* FlashAlarm.app */;
@@ -205,6 +224,9 @@
 			);
 			mainGroup = 9BC6FDEB2ED3DF8200DA448E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9BC6FECE2EDA7C8B00DA448E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9BC6FDF52ED3DF8200DA448E /* Products */;
 			projectDirPath = "";
@@ -224,6 +246,7 @@
 			files = (
 				9BC6FE942ED5EC1100DA448E /* InfoPlist.xcstrings in Resources */,
 				9BC6FE552ED4794F00DA448E /* alarm.caf in Resources */,
+				9BC6FF072EDB165000DA448E /* mixkit-spaceship-alarm-998.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +440,7 @@
 				DEVELOPMENT_TEAM = XB768QGX76;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FlashAlarm/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FlashAlarm;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -457,6 +481,7 @@
 				DEVELOPMENT_TEAM = XB768QGX76;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FlashAlarm/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FlashAlarm;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -610,6 +635,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9BC6FECE2EDA7C8B00DA448E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.14.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9BC6FECF2EDA7C8B00DA448E /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9BC6FECE2EDA7C8B00DA448E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9BC6FDEC2ED3DF8200DA448E /* Project object */;
 }

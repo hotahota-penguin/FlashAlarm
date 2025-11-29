@@ -139,6 +139,12 @@ struct FlashAnzanView: View {
         }
         .padding()
         .onAppear {
+            // Start playing alarm sound immediately
+            audioManager.playAlarmSound(soundName)
+        }
+        .task {
+            // Also try to play after a short delay to ensure it works from notifications
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
             audioManager.playAlarmSound(soundName)
         }
         .onDisappear {

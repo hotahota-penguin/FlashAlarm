@@ -20,13 +20,6 @@ struct SettingsView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
-                Section(header: Text("Notifications")) {
-                    Toggle("Show Sound Alert", isOn: $settings.showNotificationSoundAlert)
-                    Text("アラーム音選択時に通知音が固定であることを表示")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

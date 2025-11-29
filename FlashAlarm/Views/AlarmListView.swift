@@ -77,6 +77,11 @@ struct AlarmListView: View {
                     }
                 }
             }
+            .safeAreaInset(edge: .bottom) {
+                BannerAdView()
+                    .frame(height: 50)
+                    .background(Color(.systemBackground))
+            }
             .sheet(item: $editingAlarm) { alarm in
                 AlarmEditView(alarm: alarm, settings: settings) { updatedAlarm in
                     storage.updateAlarm(updatedAlarm)
