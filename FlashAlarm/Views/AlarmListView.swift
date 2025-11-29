@@ -1,4 +1,5 @@
 import SwiftUI
+import AppTrackingTransparency
 
 struct AlarmListView: View {
     @State private var settings = UserSettings()
@@ -7,6 +8,8 @@ struct AlarmListView: View {
     @State private var editingAlarm: Alarm? = nil
     @State private var activeAlarm: Alarm? = nil
     @State private var isShowingSettings = false
+    @State private var showPermissionAlert = false
+    @State private var permissionStatus: UNAuthorizationStatus = .notDetermined
     private let scheduler = AlarmScheduler.shared
     
     init() {
@@ -114,8 +117,12 @@ struct AlarmListView: View {
                 }
             }
             .task {
-                // Request notification permissions on first launch
-                _ = await scheduler.requestPermissions()
+                // Request notification permissions and check status
+                let granted = await scheduler.requestPermissions()
+                await checkNotificationPermission()
+                
+                // Request tracking permission after notification permission
+                requestTrackingPermission()
             }
             .onAppear {
                 // Check if app was launched from notification (when app was terminated)
@@ -128,21 +135,63 @@ struct AlarmListView: View {
                     checkForActiveAlarms()
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("TriggerAlarm"))) { notification in
-                // Handle alarm trigger when app is in foreground
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("TriggerAlarm"))) { notification in
                 if let alarmId = notification.userInfo?["alarmId"] as? String,
                    let alarm = storage.alarms.first(where: { $0.id.uuidString == alarmId }) {
                     activeAlarm = alarm
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                // Check if app was launched from notification (when app was in background)
+                // Check for active alarms when app enters foreground
                 if let alarmId = AppDelegate.shared?.activeAlarmId,
                    let alarm = storage.alarms.first(where: { $0.id.uuidString == alarmId }) {
                     activeAlarm = alarm
                     AppDelegate.shared?.activeAlarmId = nil
+                } else {
+                    checkForActiveAlarms()
                 }
             }
+            .alert("通知権限が必要です", isPresented: $showPermissionAlert) {
+                Button("設定を開く") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                Button("キャンセル", role: .cancel) { }
+            } message: {
+                Text("アラームを使用するには通知権限が必要です。設定アプリで通知を許可してください。")
+            }
+        }
+    }
+    
+    private func requestTrackingPermission() {
+        // Request tracking permission for ads (iOS 14.5+)
+        if #available(iOS 14.5, *) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                switch status {
+                case .authorized:
+                    print("Tracking authorized")
+                case .denied:
+                    print("Tracking denied")
+                case .notDetermined:
+                    print("Tracking not determined")
+                case .restricted:
+                    print("Tracking restricted")
+                @unknown default:
+                    break
+                }
+            }
+        }
+    }
+    
+    private func checkNotificationPermission() async {
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        permissionStatus = settings.authorizationStatus
+        
+        // Show alert if permission is denied
+        if permissionStatus == .denied {
+            showPermissionAlert = true
         }
     }
     
